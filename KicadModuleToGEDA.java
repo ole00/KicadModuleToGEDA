@@ -30,7 +30,7 @@ import java.io.*;
 public class KicadModuleToGEDA {
 
 	private static final String EXCLUDED_LAYERS_STRICT =
-			"F.CrtYd B.CrtYd Dwgs.User F.Fab B.Fab";
+			"F.CrtYd B.CrtYd Dwgs.User F.Fab B.Fab Cmts.User";
 	
     public static void main(String [] args) throws IOException {
         boolean useDefaultAuthorCredits = true;
