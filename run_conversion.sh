@@ -4,8 +4,9 @@
 #JP=~/opt/java-8-openjdk-amd64/bin/
 
 # check java compiler
-JVER=`${JP}javac -version`
-if [ "$JVER" == "" ]; then
+${JP}javac -version
+
+if [ $? != 0 ]; then
 	echo "ERROR: No java compiler found."
 	echo "Modify JP variable in this script if you have javac installed."
 	exit 1
