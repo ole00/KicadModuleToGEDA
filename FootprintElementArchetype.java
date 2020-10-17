@@ -1,7 +1,11 @@
 public class FootprintElementArchetype {
 
+    static String excludedLayers;
+
     long xOffsetNm = 0;
     long yOffsetNm = 0;
+
+    boolean excluded; //when true - exclude from export
 
     public long Xposition() {
         return xOffsetNm;
@@ -45,6 +49,14 @@ public class FootprintElementArchetype {
             return (long)(2540 * rawValue);
             // multiply 0.1 mil units by 2540 to turn into nm
         }
+    }
+
+    protected boolean isLayerExcluded(String layer) {
+        if (excludedLayers == null) {
+            return false;
+        }
+        // layer is excluded if it is found in the list of excluded layers
+        return excludedLayers.indexOf(layer) >= 0;
     }
 
 }

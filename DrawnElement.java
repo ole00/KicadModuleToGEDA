@@ -24,17 +24,17 @@
 
 
 /**
-*
-* This class is passed a Kicad Draw Segment string of the form "DS x1 y1 x2 y2 thickness layer"
-* and implements a method which can generate a gEDA LineElement definition for a gEDA PCB footprint
-*
-* @param long xOffset the X offset of the Draw Segment relative to the module origin
-* @param long yOffset the Y offset of the Draw Segment realtive to the module origin
-* @param float magnificationRatio the magnification ratio to be applied to element position and size
-*
-* @return String = "LineElement[x1 y1 x2 y2 thickness]"
-*
-*/
+ *
+ * This class is passed a Kicad Draw Segment string of the form "DS x1 y1 x2 y2 thickness layer"
+ * and implements a method which can generate a gEDA LineElement definition for a gEDA PCB footprint
+ *
+ * @param long xOffset the X offset of the Draw Segment relative to the module origin
+ * @param long yOffset the Y offset of the Draw Segment realtive to the module origin
+ * @param float magnificationRatio the magnification ratio to be applied to element position and size
+ *
+ * @return String = "LineElement[x1 y1 x2 y2 thickness]"
+ *
+ */
 
 // have implemented copper pads in gEDA output where a DS statement specifies a copper layer as well
 // based on http://kicad.sourcearchive.com/documentation/0.0.20090216/pcbstruct_8h-source.html
@@ -121,9 +121,14 @@ public class DrawnElement extends FootprintElementArchetype {
 
         String[] tokens = arg.split(" ");
 
-//		System.out.print("#The passed string:" + arg + "\n");
+        //		System.out.print("#The passed string:" + arg + "\n");
 
         if (tokens[0].startsWith("DS")) {
+            kicadLayer = Integer.parseInt(tokens[6]);
+            if (kicadLayer != 21) {
+                excluded = true;
+                return;
+            }
             parsedValue = Float.parseFloat(tokens[1]);
             xCoordOneNm = convertToNanometres(parsedValue, metric);
             parsedValue = Float.parseFloat(tokens[2]);
@@ -134,21 +139,12 @@ public class DrawnElement extends FootprintElementArchetype {
             yCoordTwoNm = convertToNanometres(parsedValue, metric);
             parsedValue = Float.parseFloat(tokens[5]);
             lineThicknessNm = convertToNanometres(parsedValue, metric);
-            kicadLayer = Integer.parseInt(tokens[6]);
-//			System.out.println("Kicad DS Layer is :" + kicadLayer);
+
+            //			System.out.println("Kicad DS Layer is :" + kicadLayer);
         } else if (tokens[0].startsWith("fp_line")) {
             metric = true;
-            parsedValue = Float.parseFloat(tokens[2]);
-            xCoordOneNm = convertToNanometres(parsedValue, metric);
-            parsedValue = Float.parseFloat(tokens[3]);
-            yCoordOneNm = convertToNanometres(parsedValue, metric);
-            parsedValue = Float.parseFloat(tokens[5]);
-            xCoordTwoNm = convertToNanometres(parsedValue, metric);
-            parsedValue = Float.parseFloat(tokens[6]);
-            yCoordTwoNm = convertToNanometres(parsedValue, metric);
-            parsedValue = Float.parseFloat(tokens[10]);
-            lineThicknessNm = convertToNanometres(parsedValue, metric);
-// need to sort out layers though and parse text options though
+
+            // need to sort out layers though and parse text options though
             if (tokens[8].startsWith("F.Cu")) {
                 kicadLayer = 15; // front most copper layer
             } else if (tokens[8].startsWith("B.Cu")) {
@@ -166,8 +162,29 @@ public class DrawnElement extends FootprintElementArchetype {
             } else if (tokens[8].startsWith("F.Mask")) {
                 kicadLayer = 23;
             }
-//                        kicadLayer = Integer.parseInt(tokens[8]);
-//                      System.out.println("Kicad DS Layer is :" + kicadLayer);
+            if (!(kicadLayer == 21 || kicadLayer == 15 || kicadLayer == 0)) {
+                excluded = true;
+                return;
+            }
+            excluded = isLayerExcluded(tokens[8]);
+            if (excluded) {
+                kicadLayer = -1;
+                return;
+            }
+
+            parsedValue = Float.parseFloat(tokens[2]);
+            xCoordOneNm = convertToNanometres(parsedValue, metric);
+            parsedValue = Float.parseFloat(tokens[3]);
+            yCoordOneNm = convertToNanometres(parsedValue, metric);
+            parsedValue = Float.parseFloat(tokens[5]);
+            xCoordTwoNm = convertToNanometres(parsedValue, metric);
+            parsedValue = Float.parseFloat(tokens[6]);
+            yCoordTwoNm = convertToNanometres(parsedValue, metric);
+            parsedValue = Float.parseFloat(tokens[10]);
+            lineThicknessNm = convertToNanometres(parsedValue, metric);
+
+            //                        kicadLayer = Integer.parseInt(tokens[8]);
+            //                      System.out.println("Kicad DS Layer is :" + kicadLayer);
         }
 
         else {
@@ -195,11 +212,11 @@ public class DrawnElement extends FootprintElementArchetype {
             // B.Paste = 18, F.Paste = 19, since gEDA uses the clearance value
             // and ignoring the F.Mask = 23 and B.Mask = 22 as well
             output = "SymbolLine[" +
-                     gEDAxCoordOne + " " +  // we multiply by 10 for gEDAs .01mil units
-                     gEDAyCoordOne + " " +
-                     gEDAxCoordTwo + " " +
-                     gEDAyCoordTwo + " " +
-                     gEDAlineThickness + "]\n";
+                    gEDAxCoordOne + " " +  // we multiply by 10 for gEDAs .01mil units
+                    gEDAyCoordOne + " " +
+                    gEDAxCoordTwo + " " +
+                    gEDAyCoordTwo + " " +
+                    gEDAlineThickness + "]\n";
         }
         return output;
     }
@@ -234,10 +251,10 @@ public class DrawnElement extends FootprintElementArchetype {
             gEDAflag = "onsolder";
         }
 
-//		gEDAxCoordOne = ((xCoordOneNm + xOffsetNm)/254); // divide nm by 254 to produce
-//		gEDAyCoordOne = ((yCoordOneNm + yOffsetNm)/254); // 0.01 mil units
-//              gEDAxCoordTwo = ((xCoordTwoNm + xOffsetNm)/254);
-//              gEDAyCoordTwo = ((yCoordTwoNm + yOffsetNm)/254);
+        //		gEDAxCoordOne = ((xCoordOneNm + xOffsetNm)/254); // divide nm by 254 to produce
+        //		gEDAyCoordOne = ((yCoordOneNm + yOffsetNm)/254); // 0.01 mil units
+        //              gEDAxCoordTwo = ((xCoordTwoNm + xOffsetNm)/254);
+        //              gEDAyCoordTwo = ((yCoordTwoNm + yOffsetNm)/254);
 
         gEDAlineThickness = (lineThicknessNm / 254); // every 254 nm is 0.01 mil
 
@@ -246,30 +263,30 @@ public class DrawnElement extends FootprintElementArchetype {
             // B.Paste = 18, F.Paste = 19, since gEDA uses the clearance value
             // and ignoring the F.Mask = 23 and B.Mask = 22 as well
             output = "ElementLine[" +
-                     gEDAxCoordOne + " " +  // we multiply by 10 for gEDAs .01mil units
-                     gEDAyCoordOne + " " +
-                     gEDAxCoordTwo + " " +
-                     gEDAyCoordTwo + " " +
-                     gEDAlineThickness + "]\n";
+                    gEDAxCoordOne + " " +  // we multiply by 10 for gEDAs .01mil units
+                    gEDAyCoordOne + " " +
+                    gEDAxCoordTwo + " " +
+                    gEDAyCoordTwo + " " +
+                    gEDAlineThickness + "]\n";
         }
         // this catches the drawing segment lines drawn on front or back copper
         else if ((kicadLayer == 0) || (kicadLayer == 15)) {
             output = "Pad[" +
-                     gEDAxCoordOne + " " +
-                     gEDAyCoordOne + " " +
-                     gEDAxCoordTwo + " " +
-                     gEDAyCoordTwo + " " +
-                     gEDAlineThickness + " " +
-                     (100 * gEDAdefaultMetalClearance) + " " +
-                     "0 " + // let's give the pads zero solder mask relief
-//                                (100*gEDAdefaultSolderMaskRelief + (kicadShapeYsizeNm/254)) + " " +
-                     '"' + "DrawnElement" + "\" " +
-//                      '"' + kicadShapeNetName + "\" " +
-                     '"' + "DrawnElement" + "\" " +
-//                      '"' + kicadShapePadName + "\" " +
-                     '"' +
-                     gEDAflag +   // the flag is useful,  top vs onsolder placement
-                     '"' + "]\n";
+                    gEDAxCoordOne + " " +
+                    gEDAyCoordOne + " " +
+                    gEDAxCoordTwo + " " +
+                    gEDAyCoordTwo + " " +
+                    gEDAlineThickness + " " +
+                    (100 * gEDAdefaultMetalClearance) + " " +
+                    "0 " + // let's give the pads zero solder mask relief
+                    //                                (100*gEDAdefaultSolderMaskRelief + (kicadShapeYsizeNm/254)) + " " +
+                    '"' + "DrawnElement" + "\" " +
+                    //                      '"' + kicadShapeNetName + "\" " +
+                    '"' + "DrawnElement" + "\" " +
+                    //                      '"' + kicadShapePadName + "\" " +
+                    '"' +
+                    gEDAflag +   // the flag is useful,  top vs onsolder placement
+                    '"' + "]\n";
         }
         return output;
     }

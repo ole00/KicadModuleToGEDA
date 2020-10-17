@@ -29,6 +29,9 @@ import java.io.*;
 
 public class KicadModuleToGEDA {
 
+	private static final String EXCLUDED_LAYERS_STRICT =
+			"F.CrtYd B.CrtYd Dwgs.User F.Fab B.Fab";
+	
     public static void main(String [] args) throws IOException {
         boolean useDefaultAuthorCredits = true;
         boolean verboseMode = false;
@@ -94,7 +97,7 @@ public class KicadModuleToGEDA {
                         System.out.println("Using " + args[count] +
                                            " for converted modules");
                     }
-                } else if (args[count].startsWith("-s") && (count < (args.length - 1))) {
+                } else if (args[count].equals("-s") && (count < (args.length - 1))) {
                     count++;
                     moduleDescriptionText = args[count];
                     if (verboseMode) {
@@ -123,7 +126,20 @@ public class KicadModuleToGEDA {
                                            ((float)minimumViaAndDrillSizeNM / 25400) +
                                            " mil (a.k.a. thousandths of an inch or 'thou').");
                     }
-                } else {
+                } else if (args[count].equals("-sl")) {
+                	FootprintElementArchetype.excludedLayers = EXCLUDED_LAYERS_STRICT;
+                } else if (args[count].equals("-xl")) {
+                	count++;
+                	// add the layer name to the excluded layer list
+                	if (FootprintElementArchetype.excludedLayers == null) {
+                		FootprintElementArchetype.excludedLayers = args[count];
+                	} else {
+                		FootprintElementArchetype.excludedLayers = 
+                				FootprintElementArchetype.excludedLayers.concat(" ").concat(args[count]);
+                	}
+                }
+                
+                else {
                     System.out.println("\nUnknown option: " +
                                        args[count] + "\n\n");
                     printHelpScreen();
@@ -531,7 +547,10 @@ public class KicadModuleToGEDA {
                            "-h HTMLsummaryOfFootprintsOutputFileName.html " +
                            "-d destinationDirectoryPathForConvertedModuleDirectory " +
                            "-s summaryDescriptionOfmoduleOrModules " +
-                           "-v verboseOutputToStdOut\n");
+                           "-v verboseOutputToStdOut\n" +
+                           "-sl strict layer exclusion: only the essential layers are converted\n" +
+                           "-xl layer.name : exclude specific KiCad layer name from the export"
+        				);
 
         System.out.println("Options are:\n\n" +
                            "\t -q QuietMode\n" +

@@ -23,18 +23,18 @@
 
 
 /**
-*
-* This class is passed a Kicad Draw Circle string of the
-* form "DC Xcentre Ycentre Xpoint Ypoint width layer"
-* and implements a method which can generate a gEDA LineElement definition for a gEDA PCB footprint
-*
-* @param long xOffset the X offset of the Draw Segment relative to the module origin
-* @param long yOffset the Y offset of the Draw Segment relative to the module origin
-* @param float magnificationRatio the magnification applied to position and dimensions, default is 1.0
-*
-* @return String = "ElementArc[x y width height startangle deltaangle thickness]"
-*
-*/
+ *
+ * This class is passed a Kicad Draw Circle string of the
+ * form "DC Xcentre Ycentre Xpoint Ypoint width layer"
+ * and implements a method which can generate a gEDA LineElement definition for a gEDA PCB footprint
+ *
+ * @param long xOffset the X offset of the Draw Segment relative to the module origin
+ * @param long yOffset the Y offset of the Draw Segment relative to the module origin
+ * @param float magnificationRatio the magnification applied to position and dimensions, default is 1.0
+ *
+ * @return String = "ElementArc[x y width height startangle deltaangle thickness]"
+ *
+ */
 import java.math.*;
 
 public class Circle extends FootprintElementArchetype {
@@ -71,7 +71,7 @@ public class Circle extends FootprintElementArchetype {
 
         String[] tokens = arg.split(" ");
 
-//		System.out.print("#The passed string:" + arg + "\n");
+        //		System.out.print("#The passed string:" + arg + "\n");
         if (tokens[0].startsWith("DC")) {
             parsedValue = Float.parseFloat(tokens[1]);
             xCoordNm = convertToNanometres(parsedValue, metric);
@@ -84,6 +84,10 @@ public class Circle extends FootprintElementArchetype {
             parsedValue = Float.parseFloat(tokens[5]);
             lineThicknessNm = convertToNanometres(parsedValue, metric);
         } else if (tokens[0].startsWith("fp_circle")) {
+            excluded = isLayerExcluded(tokens[8]);
+            if (excluded) {
+                return;
+            }
             metric = true;
             parsedValue = Float.parseFloat(tokens[2]);
             xCoordNm = convertToNanometres(parsedValue, metric);
@@ -123,14 +127,14 @@ public class Circle extends FootprintElementArchetype {
 
         radiusNm = magnificationRatio * Math.sqrt(((xCoordNm - xPointNm) * (xCoordNm - xPointNm)) + ((yCoordNm - yPointNm) * (yCoordNm - yPointNm)));
 
-//		System.out.println("X, Y, Xp, Yp: " + xCoord + " " + yCoord + " " + xPoint + " " + yPoint);
-//		System.out.println("radius: " + radius );
+        //		System.out.println("X, Y, Xp, Yp: " + xCoord + " " + yCoord + " " + xPoint + " " + yPoint);
+        //		System.out.println("radius: " + radius );
 
         // we then convert the radius to decimils
 
         gEDAradius = Math.round(radiusNm / 254); // 254 nm per 0.01 mil unit used by gEDA
 
-//		System.out.println("gEDAradius = radius * 10: " + gEDAradius );
+        //		System.out.println("gEDAradius = radius * 10: " + gEDAradius );
 
         gEDAxCoord = (long)((xCoordNm + xOffsetNm) * magnificationRatio / 254);
         // divide nm by 254 to produce
@@ -142,13 +146,13 @@ public class Circle extends FootprintElementArchetype {
         gEDAlineThickness = (lineThicknessNm / 254); // 254 nm per 0.01 mil unit used by gEDA
 
         output = "ElementArc[" +
-                 gEDAxCoord + " " +
-                 gEDAyCoord + " " +
-                 gEDAradius + " " + // for a circle, radius can be used for width
-                 gEDAradius + " " + // and height definitions in gEDA, as they are equal
-                 gEDAstartAngle + " " +
-                 gEDAdeltaAngle + " " +
-                 gEDAlineThickness + "]\n";
+                gEDAxCoord + " " +
+                gEDAyCoord + " " +
+                gEDAradius + " " + // for a circle, radius can be used for width
+                gEDAradius + " " + // and height definitions in gEDA, as they are equal
+                gEDAstartAngle + " " +
+                gEDAdeltaAngle + " " +
+                gEDAlineThickness + "]\n";
         return output;
     }
 

@@ -24,12 +24,12 @@
 
 
 /**
-*
-* This object coordinates the header, text descriptors, drawn lines, drawn arcs, drawn circles
-* and also the pads for a given Kicad module, passed as a string array of the form (String[] args)
-* and is then able to produce a gEDA footprint
-*
-*/
+ *
+ * This object coordinates the header, text descriptors, drawn lines, drawn arcs, drawn circles
+ * and also the pads for a given Kicad module, passed as a string array of the form (String[] args)
+ * and is then able to produce a gEDA footprint
+ *
+ */
 
 import java.util.Scanner;
 
@@ -43,10 +43,10 @@ public class Footprint {
     int FPFeatureCount = 0;
 
 
-//	DrawnElement[] moduleSilkLines = new DrawnElement[1900];
-//	Circle[] moduleSilkCircles = new Circle[200];
-//	Arc[] moduleSilkArcs = new Arc[200];
-//	KicadPad[] modulePads = new KicadPad[200];
+//  DrawnElement[] moduleSilkLines = new DrawnElement[1900];
+//  Circle[] moduleSilkCircles = new Circle[200];
+//  Arc[] moduleSilkArcs = new Arc[200];
+//  KicadPad[] modulePads = new KicadPad[200];
 
     boolean metricSystem = false;   // this will be changed to "true", if needed,
     // with parsing in due course
@@ -89,7 +89,7 @@ public class Footprint {
         String trimmedString = "";
         String[] tokens;
 
-//		System.out.println(args);
+//      System.out.println(args);
 
         while (moduleDefinition.hasNext() && !moduleFinished) {
             parseString = moduleDefinition.nextLine();
@@ -101,7 +101,7 @@ public class Footprint {
             // it to construct the relevant footprint element object
 
             if (tokens[0].startsWith("$INDEX")) {
-                //	System.out.println(footprintName); // we don't care about the index
+                //  System.out.println(footprintName); // we don't care about the index
             } else if (tokens[0].startsWith("$MODULE") || tokens[0].startsWith("module")) {
                 // it all starts here, with the module header
                 // first we look for double quotes inserted by the likes of madparts
@@ -117,14 +117,14 @@ public class Footprint {
                 // now we get rid of characters ![a-zA-Z0-9.-] which
                 // may be unacceptable for a filename
                 footprintName = footprintName.replaceAll("[^a-zA-Z0-9.-]", "_");
-                //				System.out.println(footprintName + " is the footprint name found.");
+                //              System.out.println(footprintName + " is the footprint name found.");
 
                 // we now step through the module line by line
                 while (moduleDefinition.hasNext() && !moduleFinished) {
                     parseString = moduleDefinition.nextLine();
                     trimmedString = parseString.trim();
-                    //	System.out.println("Current footprint def line:" +
-                    //			trimmedString);
+                    //  System.out.println("Current footprint def line:" +
+                    //          trimmedString);
 
                     // we tokenize the line
                     tokens = trimmedString.split(" ");
@@ -154,38 +154,30 @@ public class Footprint {
                         textDescriptorCount++;
                         // we only want to know what the reference text is
                     }
-
-                    else if (tokens[0].startsWith("DS")) {
-                        footprintElements[FPFeatureCount] = new DrawnElement();
-                        footprintElements[FPFeatureCount].populateElement(trimmedString, metricSystem);
-                        FPFeatureCount++;
-                        drawSegmentCount++;
-                    } else if (tokens[0].startsWith("fp_line")) {
-                        footprintElements[FPFeatureCount] = new DrawnElement();
-                        footprintElements[FPFeatureCount].populateElement(trimmedString, metricSystem);
-                        FPFeatureCount++;
-                        drawSegmentCount++;
-                    } else if (tokens[0].startsWith("DC")) {
-                        footprintElements[FPFeatureCount] = new Circle();
-                        footprintElements[FPFeatureCount].populateElement(trimmedString, metricSystem);
-                        FPFeatureCount++;
-                        drawCircleCount++;
-
-                    } else if (tokens[0].startsWith("fp_circle")) {
-                        footprintElements[FPFeatureCount] = new Circle();
-                        footprintElements[FPFeatureCount].populateElement(trimmedString, metricSystem);
-                        FPFeatureCount++;
-                        drawCircleCount++;
-                    } else if (tokens[0].startsWith("DA")) {
-                        footprintElements[FPFeatureCount] = new Arc();
-                        footprintElements[FPFeatureCount].populateElement(trimmedString, metricSystem);
-                        FPFeatureCount++;
-                        drawArcCount++;
-                    } else if (tokens[0].startsWith("fp_arc")) {
-                        footprintElements[FPFeatureCount] = new Arc();
-                        footprintElements[FPFeatureCount].populateElement(trimmedString, metricSystem);
-                        FPFeatureCount++;
-                        drawArcCount++;
+                    else if (tokens[0].startsWith("DS") || tokens[0].startsWith("fp_line")) {
+                        DrawnElement element = new DrawnElement();
+                        element.populateElement(trimmedString, metricSystem);
+                        if (!element.excluded) {
+                            footprintElements[FPFeatureCount] = element;
+                            FPFeatureCount++;
+                            drawSegmentCount++;                         
+                        }
+                    } else if (tokens[0].startsWith("DC") || tokens[0].startsWith("fp_circle")) {
+                        Circle circle = new Circle();
+                        circle.populateElement(trimmedString, metricSystem);
+                        if (!circle.excluded) {
+                            footprintElements[FPFeatureCount] = circle;
+                            FPFeatureCount++;
+                            drawCircleCount++;
+                        }
+                    } else if (tokens[0].startsWith("DA") || tokens[0].startsWith("fp_arc")) {
+                        Arc arc = new Arc();
+                        arc.populateElement(trimmedString, metricSystem);
+                        if (!arc.excluded) {
+                            footprintElements[FPFeatureCount] = arc;
+                            FPFeatureCount++;
+                            drawArcCount++;
+                        }
                     } else if (tokens[0].startsWith("pad")) {
                         // we have identified a pad definition in the module
                         padDefinitionLines = trimmedString;
@@ -288,7 +280,7 @@ public class Footprint {
                                 "# Pad count: " + padCount + "\n#\n" +
                                 gEDAfootprintElementField);
 
-//		System.out.println(assembledGEDAelement);
+//      System.out.println(assembledGEDAelement);
 
         for (int counter = 0; counter < FPFeatureCount; counter++) {
             assembledGEDAelement = assembledGEDAelement +
@@ -315,7 +307,5 @@ public class Footprint {
             // multiply 0.1 mil units by 2540 to turn into nm
         }
     }
-
-
 
 }

@@ -88,6 +88,10 @@ public class Arc extends FootprintElementArchetype {
             parsedValue = Float.parseFloat(tokens[6]);
             lineThicknessNm = convertToNanometres(parsedValue, metric);
         } else if (tokens[0].startsWith("fp_arc")) {
+            excluded = isLayerExcluded(tokens[10]);
+            if (excluded) {
+                return;
+            }
             metric = true;
             parsedValue = Float.parseFloat(tokens[2]);
             xCoordNm = convertToNanometres(parsedValue, metric);
