@@ -1,3 +1,23 @@
+*THIS FORK*
+
+- Fixes conversion of angles
+- adds a Linux conversion script 'run_conversion.sh' that compiles the tool 
+  and runs the footprint conversion on all KiCad modules located in
+  
+  /usr/share/kicad/modules
+  
+  Simply run the shell script to start the conversion, assuming you have
+  the KiCad (and its modules) also installed. 
+  The converted files are stored in ./Converted directory.
+  
+- to use the converted footprints copy the Converted directory (or create
+  a symlink) to /usr/share/pcb/newlib/Converted
+  
+Original doc follows:
+
+-----------
+
+
 # KicadModuleToGEDA
 KicadModuleToGEDA - a utility for turning kicad modules into gEDA PCB footprints
 
