@@ -11,11 +11,6 @@ public class FootprintElementArchetype {
         return yOffsetNm;
     }
 
-    public void FootprintElementArchetype() {
-        xOffsetNm = 0;
-        yOffsetNm = 0;
-    }
-
     public void FootprintElementArchetype(long x, long y) {
         xOffsetNm = x;
         yOffsetNm = y;
