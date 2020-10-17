@@ -50,6 +50,6 @@ for KDIR in ${MODULE_DIRS}; do
 	for KMODULE in ${MODULES} ; do
 		NAME=$(basename "${KMODULE%.*}")
 		echo "Converting module: ${NAME}"
-		${JP}java -cp bin KicadModuleToGEDA -q -nosummary -k ${KMODULE} -d ${OUTDIR}/
+		${JP}java -cp bin KicadModuleToGEDA -q -nosummary -sl -k ${KMODULE} -d ${OUTDIR}/
 	done
 done
