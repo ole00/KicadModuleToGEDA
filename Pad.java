@@ -63,6 +63,7 @@ public class Pad extends FootprintElementArchetype {
 
     long kicadPadPositionXNm = 0;
     long kicadPadPositionYNm = 0;
+    float kicadRoundRectRadiusRatio;
 
     String kicadPadAttributeType = "null";
 
@@ -257,6 +258,8 @@ public class Pad extends FootprintElementArchetype {
                     kicadDrillShape = 'O';
                 } else if (tokens[3].startsWith("trapezoid")) {
                     kicadDrillShape = 'T';
+                } else if (tokens[3].equals("roundrect")) {
+                    kicadDrillShape = 'U';
                 }
 
                 // now we parse the less predictable remaining attributes
@@ -328,6 +331,9 @@ public class Pad extends FootprintElementArchetype {
                         kicadShapeNetName = tokens[parseIndex];
 //              		we now need to cleanse the NetName of nasties like '$' which sometimes occur
                         kicadShapeNetName = kicadShapeNetName.replaceAll("[^a-zA-Z0-9.-]", "_");
+                    } else if (tokens[parseIndex].equals("roundrect_rratio")) {
+                        parseIndex++;
+                        kicadRoundRectRadiusRatio = Float.parseFloat(tokens[parseIndex]);
                     }
 
                 }
@@ -424,6 +430,11 @@ public class Pad extends FootprintElementArchetype {
                 gEDAflag = "square"; // "0x0000" now deprecated
             }
             break;
+        case 'U' : //round rect
+            if (kicadRoundRectRadiusRatio < 0.3) {
+                gEDAflag = "square";
+            }
+            break;
 
         /**
         *
@@ -436,7 +447,7 @@ public class Pad extends FootprintElementArchetype {
         */
 
         default:
-            gEDAflag = "blah";
+            gEDAflag = "";
             break;
 
         }
