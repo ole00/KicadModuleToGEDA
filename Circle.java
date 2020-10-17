@@ -60,10 +60,6 @@ public class Circle extends FootprintElementArchetype {
 
     String kicadCircleDescriptor = "";
 
-    public void Circle() {
-        output = "#Hmm, the no arg KicadDrawingCircle constructor didn't do much";
-    }
-
     public String toString() {
         return kicadCircleDescriptor;
     }

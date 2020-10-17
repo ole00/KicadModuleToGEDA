@@ -109,9 +109,6 @@ public class DrawnElement extends FootprintElementArchetype {
 
     String kicadDrawnSegmentDescriptor = "";
 
-    public void DrawnElement() {
-        output = "#Hmm, the no arg KicadDrawingElement constructor didn't do much";
-    }
 
     public String toString() {
         return kicadDrawnSegmentDescriptor;

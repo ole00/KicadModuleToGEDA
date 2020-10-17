@@ -65,10 +65,6 @@ public class FootprintHeader extends FootprintElementArchetype {
 
     String kicadTextDescriptor = "";
 
-    public void FootprintHeader() {
-        output = "#Hmm, the no arg KicadTextField constructor didn't do much";
-    }
-
     public String toString() {
         return kicadTextDescriptor;
     }

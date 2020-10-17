@@ -30,7 +30,6 @@ import java.io.*;
 public class KicadModuleToGEDA {
 
     public static void main(String [] args) throws IOException {
-        boolean insertElementPreliminaryComments = false;
         boolean useDefaultAuthorCredits = true;
         boolean verboseMode = false;
         boolean quietMode = false;
@@ -295,11 +294,6 @@ public class KicadModuleToGEDA {
             }
 
             boolean inModule = false;
-            boolean gotOneModule = false;
-
-            int index = 0;
-            int LeftBracketCount = 0;  // for s-file parsing
-            int RightBracketCount = 0; // for s-file parsing
             int moduleBracketTally = 0;
             int elementBracketTally = 0; // positive is "(" bracket, negative is ")" bracket
 
@@ -373,7 +367,6 @@ public class KicadModuleToGEDA {
                             System.out.println("End of Module");
                         }
                         inModule = false;
-                        gotOneModule = true;
                         footprintsInLibrary[extractedModuleCount] = new Footprint(completeModule, legacyKicadMmMetricUnits, minimumViaAndDrillSizeNM);
                         completeModule = "";
                         extractedModuleCount++;
@@ -495,14 +488,6 @@ public class KicadModuleToGEDA {
 
             generateHTMLsummaryFile(convertedKicadModulePath, htmlSummaryFileName, HTMLsummaryOfConvertedModules);
         }
-    }
-
-// we have a routine to output completed GEDA footprint files into the conversion directory
-// by interrogating the array of footprints we have created:
-//            footprintsInLibrary[extractedModuleCount]
-
-    private static void writeGEDAfootprints(Footprint [] footprintArray) throws IOException {
-        System.out.println("Placeholder footprint writer stub");
     }
 
 // we have a routine to put the completed HTML summary into a file in the same directory as

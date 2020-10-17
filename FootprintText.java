@@ -72,21 +72,9 @@ public class FootprintText extends FootprintElementArchetype {
     // default value of 1.829mm for testing = 70.6mil, or
     // 1327000 = 83.7mil
 
-    public void FootprintText(long offsetX, long offsetY) {
-        // (x,y) position relative to footprint or layout centroid
-        xLayoutOffsetNm = offsetX;
-        yLayoutOffsetNm = offsetY;
-    }
-
-    public void FootprintText() {
-        ;
-    }
-
     public String toString() {
         return kicadTextDescriptor;
     }
-
-
 
     public String generateGEDAelement(long offsetX, long offsetY, float magnificationRatio) {
 

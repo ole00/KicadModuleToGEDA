@@ -62,10 +62,6 @@ public class Arc extends FootprintElementArchetype {
 
     String kicadArcDescriptor = "";
 
-    public void KicadDrawingArc() {
-        output = "#Hmm, the no arg KicadDrawingArc constructor didn't do much";
-    }
-
     public String toString() {
         return kicadArcDescriptor;
     }

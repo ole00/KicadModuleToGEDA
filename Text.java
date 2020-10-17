@@ -23,7 +23,6 @@
 
 public class Text extends FootprintElementArchetype {
 
-    String output = "";
     String kicadTextDescriptor = "";
 
     long xCoordNm = 0;
@@ -43,10 +42,6 @@ public class Text extends FootprintElementArchetype {
     int kicadTopCopperLayer = 15;
     int textLayer = 21;
     String displayedTextField = "";
-
-    public void Text() {
-        output = "# Hmm, the no arg constructor for the text object didn't do much";
-    }
 
     public String toString() {
         return kicadTextDescriptor;
