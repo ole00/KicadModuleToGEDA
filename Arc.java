@@ -108,7 +108,7 @@ public class Arc extends FootprintElementArchetype
                         xPointNm = convertToNanometres(parsedValue, metric);
                         parsedValue = Float.parseFloat(tokens[6]);
                         yPointNm = convertToNanometres(parsedValue, metric);
-                        kicadDeltaAngle = Integer.parseInt(tokens[8]);
+                        kicadDeltaAngle = (int)(Float.parseFloat(tokens[8]) * 10);
                         parsedValue = Float.parseFloat(tokens[12]);
                         lineThicknessNm = convertToNanometres(parsedValue, metric);
 // this does not establish what layer it is to be on, but no biggy
