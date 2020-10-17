@@ -183,7 +183,7 @@ public class KicadModuleToGEDA {
         int modulesInLibraryCount = 0;
 
         String tempString = "";
-        Boolean legacyFlag = true;
+        boolean legacyFlag = true;
 
         int extractedModuleLineCounter = 0;
         int extractedModuleCount = 0;

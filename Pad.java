@@ -82,7 +82,7 @@ public class Pad extends FootprintElementArchetype {
     String topLayerPad = "";     // we use these temporary variables when building slots
     String bottomLayerPad = "";  // and obroid pads
 
-    Boolean equilateralPad = true; // also used when processing obroid, round and circular pads
+    boolean equilateralPad = true; // also used when processing obroid, round and circular pads
 
 // Pins and SMD pads have been converted from Kicad foot prints which do not have solder
 // mask relief or clearances specified. Default values used for solder mask relief and
@@ -827,7 +827,7 @@ public class Pad extends FootprintElementArchetype {
 
     }
 
-    private long convertToNanometres(float rawValue, Boolean metricSystem) {
+    private long convertToNanometres(float rawValue, boolean metricSystem) {
         if (metricSystem) {
             return (long)(rawValue * 1000000); // 1,000,000 nm per mm
         } else {

@@ -278,7 +278,7 @@ public class DrawnElement extends FootprintElementArchetype {
     }
 
 
-	private long convertToNanometres(float rawValue, Boolean metricSystem)
+	private long convertToNanometres(float rawValue, boolean metricSystem)
 	{
 		if (metricSystem)
 		{

@@ -48,7 +48,7 @@ public class Footprint {
 //	Arc[] moduleSilkArcs = new Arc[200];
 //	KicadPad[] modulePads = new KicadPad[200];
 
-    Boolean metricSystem = false;   // this will be changed to "true", if needed,
+    boolean metricSystem = false;   // this will be changed to "true", if needed,
     // with parsing in due course
 
     int moduleLineCountTotal = 0;
@@ -78,7 +78,7 @@ public class Footprint {
 
     String reconstructedKicadModuleAsString = ""; // we'll return this from the toString() method
 
-    public Footprint(String args, Boolean MmMetricUnits, long minimumViaAndDrillSizeNM) {
+    public Footprint(String args, boolean MmMetricUnits, long minimumViaAndDrillSizeNM) {
 
         metricSystem = MmMetricUnits;
         boolean moduleFinished = false;

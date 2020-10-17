@@ -73,7 +73,7 @@ public class FootprintHeader extends FootprintElementArchetype {
         return kicadTextDescriptor;
     }
 
-    public void populateHeader(String arg, Boolean metric) {
+    public void populateHeader(String arg, boolean metric) {
         kicadTextDescriptor = arg;
 
         float parsedValue = 0;
@@ -163,7 +163,7 @@ public class FootprintHeader extends FootprintElementArchetype {
         return output;
     }
 
-    private long convertToNanometres(float rawValue, Boolean metricSystem) {
+    private long convertToNanometres(float rawValue, boolean metricSystem) {
         if (metricSystem) {
             return (long)(rawValue * 1000000); // convert mm to nm
         } else {
