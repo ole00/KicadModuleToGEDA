@@ -43,7 +43,7 @@ public class KicadModuleToGEDA
 		long minimumViaAndDrillSizeNM = 0; // default is no minimum drill size
 						   // in nanometres
 						   // i.e. 300000 = 0.3mm = 11.81mil
-
+		boolean noHtmlSummary = false; //generate html summary by default
 
 // the following are default strings which can be changed to suit the user's needs,
 // particularly if usage is intended via stdin, as these will be the defaults used
@@ -123,6 +123,9 @@ public class KicadModuleToGEDA
                                                 System.out.println("Using " + args[count] +
                                                 " for HTML description of converted modules");
                                         }
+				}
+				else if (args[count].equals("-nosummary")) {
+					noHtmlSummary = true;
 				}
 				else if (args[count].startsWith("-v"))
 				{
@@ -558,20 +561,21 @@ public class KicadModuleToGEDA
 			newGEDAfootprintFile.close();
 		}
 
+		if (! noHtmlSummary) {
 // having populated footprint objects in an array
 // we now finish off the HTML summary of the created modules
 
-		HTMLsummaryOfConvertedModules = HTMLsummaryOfConvertedModules + "\n</ul></html>\n";
-		if (verboseMode)
-		{
-			System.out.println(HTMLsummaryOfConvertedModules);
+			HTMLsummaryOfConvertedModules = HTMLsummaryOfConvertedModules + "\n</ul></html>\n";
+			if (verboseMode)
+			{
+				System.out.println(HTMLsummaryOfConvertedModules);
+			}
+
+	// and we pass the HTML to a subroutine to save the summary to disc, using either a user
+	// supplied file name, or alternatively,  an auto generated name kicad_module_name-HTMLsummary.html
+
+			generateHTMLsummaryFile(convertedKicadModulePath, htmlSummaryFileName, HTMLsummaryOfConvertedModules);
 		}
-
-// and we pass the HTML to a subroutine to save the summary to disc, using either a user
-// supplied file name, or alternatively,  an auto generated name kicad_module_name-HTMLsummary.html
-
-		generateHTMLsummaryFile(convertedKicadModulePath, htmlSummaryFileName, HTMLsummaryOfConvertedModules);
-		
 	}
 
 // we have a routine to output completed GEDA footprint files into the conversion directory
