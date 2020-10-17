@@ -174,12 +174,12 @@ public class Arc extends FootprintElementArchetype
 			}
 			else if (xDir < 0) // this is RLQ on screen, +ve X, +ve Y
 			{
-				gEDAstartAngle = 180 - Math.round(1.0 * Math.toDegrees(Math.atan((yDir)/(xDir))));
+				gEDAstartAngle = 180 - Math.round(1.0 * Math.toDegrees(Math.atan(((double)yDir)/((double)xDir))));
 //				System.out.println("startangle B: " + startAngle);
 			}
 			else if (xDir > 0) // this LLQ on screen, +ve X, -ve Y
 			{
-				gEDAstartAngle = 0 - Math.round(1.0 * Math.toDegrees(Math.atan((yDir)/(xDir)))); // atan(-veY/+veX) < 0
+				gEDAstartAngle = 0 - Math.round(1.0 * Math.toDegrees(Math.atan(((double)yDir)/((double)xDir)))); // atan(-veY/+veX) < 0
 //				System.out.println("startangle C: " + startAngle);
 			}
 		}
@@ -193,12 +193,12 @@ public class Arc extends FootprintElementArchetype
 			}
 			else if (xDir < 0) // this is RUQ on screen, +ve X, -ve Y
 			{
-				gEDAstartAngle = 180 - Math.round(1.0 * Math.toDegrees(Math.atan((yDir)/(xDir)))); // atan(-veY/+veX) < 0
+				gEDAstartAngle = 180 - Math.round(1.0 * Math.toDegrees(Math.atan(((double)yDir)/((double)xDir)))); // atan(-veY/+veX) < 0
 //				System.out.println("startangle E: " + startAngle);
 			}
 			else if (xDir > 0) // this is LUQ on screen, +ve X, +ve Y
 			{
-				gEDAstartAngle = 0 -  Math.round(1.0 * Math.toDegrees(Math.atan((yDir)/(xDir))));
+				gEDAstartAngle = 0 -  Math.round(1.0 * Math.toDegrees(Math.atan(((double)yDir)/((double)xDir))));
 //				System.out.println("startangle F: " + startAngle);
 			}
 
