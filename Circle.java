@@ -156,15 +156,4 @@ public class Circle extends FootprintElementArchetype {
         return output;
     }
 
-    private long convertToNanometres(float rawValue, boolean metricSystem) {
-        if (metricSystem) { // metricSystem = units mm
-            return (long)(1000000 * rawValue);
-            // multiply mm by 1000000 to turn into nm
-        } else {
-            return (long)(2540 * rawValue);
-            // multiply 0.1 mil units by 2540 to turn into nm
-        }
-    }
-
-
 }

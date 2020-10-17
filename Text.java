@@ -121,12 +121,4 @@ public class Text extends FootprintElementArchetype {
         }
     }
 
-
-    private long convertToNanometres(float rawValue, boolean metricSystem) {
-        if (metricSystem) { //  metric = the newer legacy format with mm instead of decimil = 0.1 mil units
-            return (long)(rawValue * 10000000);
-        } else { // this implies the input is in Kicad legacy decimil = 0.1mil units
-            return (long)(2540 * rawValue); // a 0.1 mil unit = 2540 nm
-        }
-    }
 }

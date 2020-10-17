@@ -163,12 +163,4 @@ public class FootprintHeader extends FootprintElementArchetype {
         return output;
     }
 
-    private long convertToNanometres(float rawValue, boolean metricSystem) {
-        if (metricSystem) {
-            return (long)(rawValue * 1000000); // convert mm to nm
-        } else {
-            return (long)(rawValue * 2540); // convert 0.1 mil kicad units to nm
-        }
-    }
-
 }

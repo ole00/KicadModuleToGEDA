@@ -277,17 +277,4 @@ public class DrawnElement extends FootprintElementArchetype {
         return output;
     }
 
-
-	private long convertToNanometres(float rawValue, boolean metricSystem)
-	{
-		if (metricSystem)
-		{
-			return (long)(rawValue * 1000000); // 1 mm = 1000000 nm
-		}
-		else
-		{
-			return (long)(rawValue * 2540 ); // 0.1 mil unit = 2540 nm
-		}
-	}
-
 }

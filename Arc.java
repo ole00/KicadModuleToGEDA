@@ -264,12 +264,4 @@ public class Arc extends FootprintElementArchetype {
         return output;
     }
 
-    private long convertToNanometres(float rawValue, boolean metricSystem) {
-        if (!metricSystem) { // this implies the input is in Kicad legacy decimil = 0.1mil units
-            return (long)(2540 * rawValue); // a 0.1 mil unit = 2540 nm
-        } else { // metric = the newer legacy format with mm instead of decimil = 0.1 mil units
-            return (long)(rawValue * 1000000);
-        }
-    }
-
 }

@@ -827,13 +827,4 @@ public class Pad extends FootprintElementArchetype {
 
     }
 
-    private long convertToNanometres(float rawValue, boolean metricSystem) {
-        if (metricSystem) {
-            return (long)(rawValue * 1000000); // 1,000,000 nm per mm
-        } else {
-            return (long)(rawValue * 2540); // 2540 nm per 0.1 mil
-        }
-    }
-
-
 }
