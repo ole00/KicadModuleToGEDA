@@ -226,6 +226,7 @@ public class Footprint {
             }
 
         }
+        moduleDefinition.close();
 
         // we also create a single string version of the module for
         // use by the toString() method

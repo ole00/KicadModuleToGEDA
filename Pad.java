@@ -334,6 +334,8 @@ public class Pad extends FootprintElementArchetype {
 
             }
         }
+        padDefinition.close();
+
         // might be good to default populate the net name
         // if empty
         // System.out.println("NetName : " + kicadShapeNetName);
