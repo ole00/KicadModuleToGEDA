@@ -181,11 +181,13 @@ public class Footprint {
                     } else if (tokens[0].startsWith("pad")) {
                         // we have identified a pad definition in the module
                         padDefinitionLines = trimmedString;
-                        padCount++;
-
-                        footprintElements[FPFeatureCount] = new Pad();
-                        footprintElements[FPFeatureCount].populateElement(padDefinitionLines, metricSystem, minimumViaAndDrillSizeNM);
-                        FPFeatureCount++;
+                        Pad pad = new Pad();
+                        pad.populateElement(padDefinitionLines, metricSystem, minimumViaAndDrillSizeNM);
+                        if (!pad.excluded) {
+                            padCount++;
+                            footprintElements[FPFeatureCount] = pad;
+                            FPFeatureCount++;
+                        }
                     } else if (tokens[0].startsWith("$PAD")) {
                         // we have identified a $PAD definition in the module
                         padDefinitionLines = "";

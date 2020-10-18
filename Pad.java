@@ -337,7 +337,15 @@ public class Pad extends FootprintElementArchetype {
                         kicadRoundRectRadiusRatio = Float.parseFloat(tokens[parseIndex]);
                     } else if (tokens[parseIndex].equals("layers")) {
                         parseIndex++;
+                        // TODO - there might be several layers defined for a single pad, but we only process
+                        // the first one. We should probably scan the rest of the tokens and store the layers
+                        // into a bitmap
                         kicadLayer = getKicadLayer(tokens[parseIndex]);
+                        
+                        //exclude pad areas that define where solder paste should be applied (the stencil areas)
+                        if (kicadLayer == KC_LAYER_TOP_PASTE || kicadLayer == KC_LAYER_BOTTOM_PASTE) {
+                            excluded = true;
+                        }
                     }
 
                 }
