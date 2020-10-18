@@ -1,5 +1,14 @@
 public class FootprintElementArchetype {
 
+    public static final int KC_LAYER_BOTTOM_COPPER = 0;
+    public static final int KC_LAYER_TOP_COPPER = 15;
+    public static final int KC_LAYER_BOTTOM_PASTE = 18;
+    public static final int KC_LAYER_TOP_PASTE = 19;
+    public static final int KC_LAYER_BOTTOM_SILK = 20;
+    public static final int KC_LAYER_TOP_SILK = 21;
+    public static final int KC_LAYER_BOTTOM_MASK = 22;
+    public static final int KC_LAYER_TOP_MASK = 23;
+    
     static String excludedLayers;
 
     long xOffsetNm = 0;
@@ -59,4 +68,33 @@ public class FootprintElementArchetype {
         return excludedLayers.indexOf(layer) >= 0;
     }
 
+    protected int getKicadLayer(String layer) {
+        if (layer.startsWith("F.Cu")) {
+            return KC_LAYER_TOP_COPPER; // front most copper layer
+        } else if (layer.startsWith("B.Cu")) {
+            return KC_LAYER_BOTTOM_COPPER;
+        } else if (layer.startsWith("B.Paste")) {
+            return KC_LAYER_BOTTOM_PASTE;
+        } else if (layer.startsWith("F.Paste")) {
+            return KC_LAYER_TOP_PASTE;
+        } else if (layer.startsWith("B.Silk")) {
+            return KC_LAYER_BOTTOM_SILK;
+        } else if (layer.startsWith("F.Silk")) {
+            return KC_LAYER_TOP_SILK;
+        } else if (layer.startsWith("B.Mask")) {
+            return KC_LAYER_BOTTOM_MASK;
+        } else if (layer.startsWith("F.Mask")) {
+            return KC_LAYER_TOP_MASK;
+        }
+        return -1;
+    }
+    protected String addGedaFlag(String flags, String newFlag) {
+        if (flags == null || flags.length() == 0) {
+            return newFlag;
+        }
+        if (flags.endsWith("\"")) {
+            return flags.concat(newFlag);
+        }
+        return flags.concat(",").concat(newFlag);
+    }
 }

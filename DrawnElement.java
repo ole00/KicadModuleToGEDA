@@ -105,7 +105,7 @@ public class DrawnElement extends FootprintElementArchetype {
     // which is 0.01 inches, which is 10 mil = 10 thou
     long gEDAlineThickness = 100; // this is 10 mil in 0.1 mil units
 
-    int kicadLayer = 21; // 21 is set as the default, and is the top silkscreen layer
+    int kicadLayer = KC_LAYER_TOP_SILK; // 21 is set as the default, and is the top silkscreen layer
 
     String kicadDrawnSegmentDescriptor = "";
 
@@ -125,7 +125,7 @@ public class DrawnElement extends FootprintElementArchetype {
 
         if (tokens[0].startsWith("DS")) {
             kicadLayer = Integer.parseInt(tokens[6]);
-            if (kicadLayer != 21) {
+            if (kicadLayer != KC_LAYER_TOP_SILK) {
                 excluded = true;
                 return;
             }
@@ -144,25 +144,8 @@ public class DrawnElement extends FootprintElementArchetype {
         } else if (tokens[0].startsWith("fp_line")) {
             metric = true;
 
-            // need to sort out layers though and parse text options though
-            if (tokens[8].startsWith("F.Cu")) {
-                kicadLayer = 15; // front most copper layer
-            } else if (tokens[8].startsWith("B.Cu")) {
-                kicadLayer = 0;
-            } else if (tokens[8].startsWith("B.Paste")) {
-                kicadLayer = 18;
-            } else if (tokens[8].startsWith("F.Paste")) {
-                kicadLayer = 19;
-            } else if (tokens[8].startsWith("B.Silk")) {
-                kicadLayer = 20;
-            } else if (tokens[8].startsWith("F.Silk")) {
-                kicadLayer = 21;
-            } else if (tokens[8].startsWith("B.Mask")) {
-                kicadLayer = 22;
-            } else if (tokens[8].startsWith("F.Mask")) {
-                kicadLayer = 23;
-            }
-            if (!(kicadLayer == 21 || kicadLayer == 15 || kicadLayer == 0)) {
+            kicadLayer = getKicadLayer(tokens[8]);
+            if (!(kicadLayer == KC_LAYER_TOP_SILK || kicadLayer == KC_LAYER_TOP_COPPER || kicadLayer == KC_LAYER_BOTTOM_COPPER)) {
                 excluded = true;
                 return;
             }

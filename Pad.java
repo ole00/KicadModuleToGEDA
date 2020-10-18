@@ -64,6 +64,7 @@ public class Pad extends FootprintElementArchetype {
     long kicadPadPositionXNm = 0;
     long kicadPadPositionYNm = 0;
     float kicadRoundRectRadiusRatio;
+    int kicadLayer = KC_LAYER_TOP_COPPER; // front most copper layer (F.Cu)
 
     String kicadPadAttributeType = "null";
 
@@ -92,7 +93,7 @@ public class Pad extends FootprintElementArchetype {
 // Users of the foot print must ensure that the solder mask reliefs and clearances are
 // compatible with the PCB manufacturer's process tolerances
 
-    String gEDAflag = "blah"; // hex values now deprecated i.e. "0x0000"
+    String gEDAflag = ""; // hex values now deprecated i.e. "0x0000"
 
     public Pad() { // the default constructor simply creates a simple default pad for testing
         kicadShapePadName = "1";
@@ -334,6 +335,9 @@ public class Pad extends FootprintElementArchetype {
                     } else if (tokens[parseIndex].equals("roundrect_rratio")) {
                         parseIndex++;
                         kicadRoundRectRadiusRatio = Float.parseFloat(tokens[parseIndex]);
+                    } else if (tokens[parseIndex].equals("layers")) {
+                        parseIndex++;
+                        kicadLayer = getKicadLayer(tokens[parseIndex]);
                     }
 
                 }
@@ -428,11 +432,17 @@ public class Pad extends FootprintElementArchetype {
             } else if (kicadPadAttributeType.startsWith("SMD") ||
                        kicadPadAttributeType.startsWith("CONN")) {
                 gEDAflag = "square"; // "0x0000" now deprecated
+                if (kicadLayer == KC_LAYER_BOTTOM_COPPER) {
+                    gEDAflag = addGedaFlag(gEDAflag, "onsolder");
+                }
             }
             break;
         case 'U' : //round rect
             if (kicadRoundRectRadiusRatio < 0.3) {
                 gEDAflag = "square";
+            }
+            if (kicadLayer == KC_LAYER_BOTTOM_COPPER) {
+                gEDAflag = addGedaFlag(gEDAflag, "onsolder");
             }
             break;
 
@@ -629,7 +639,7 @@ public class Pad extends FootprintElementArchetype {
                               '"' +
                               oblongSlotFlag;
 
-                bottomLayerPad = topLayerPad + ",onsolder";
+                bottomLayerPad = addGedaFlag(topLayerPad, "onsolder");
 
                 output = output + topLayerPad + "\"]\n" + bottomLayerPad + "\"]\n";
 
@@ -668,7 +678,7 @@ public class Pad extends FootprintElementArchetype {
                               '"' +
                               oblongSlotFlag;
 
-                bottomLayerPad = topLayerPad + ",onsolder";
+                bottomLayerPad = addGedaFlag(topLayerPad, "onsolder");
 
                 output = output + topLayerPad + "\"]\n" + bottomLayerPad + "\"]\n";
 
@@ -795,7 +805,7 @@ public class Pad extends FootprintElementArchetype {
                               '"' +
                               oblongSlotFlag;
 
-                bottomLayerPad = topLayerPad + ",onsolder";
+                bottomLayerPad = addGedaFlag(topLayerPad, "onsolder");
 
                 output = output + topLayerPad + "\"]\n" + bottomLayerPad + "\"]\n";
             }
@@ -824,7 +834,7 @@ public class Pad extends FootprintElementArchetype {
                               '"' +
                               oblongSlotFlag;
 
-                bottomLayerPad = topLayerPad + ",onsolder";
+                bottomLayerPad = addGedaFlag(topLayerPad, "onsolder");
 
                 output = output + topLayerPad + "\"]\n" + bottomLayerPad + "\"]\n";
 
