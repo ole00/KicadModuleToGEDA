@@ -5,6 +5,8 @@
   unless gEDA PCB supports variable radius of rounded rectangle corners) 
 - supports pads on the bottom copper layer
 - cleans up the net names
+- support for not exporting courtyard lines and fabrication auxiliary lines
+  on silkscreen (use -sl parameter)
 - adds a Linux conversion script 'run_conversion.sh' that compiles the tool 
   and runs the footprint conversion on all KiCad modules located in
   
