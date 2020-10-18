@@ -1,6 +1,10 @@
 *THIS FORK*
 
-- Fixes conversion of angles
+- fixes conversion of angles
+- slightly better support of rounded rectangles (can't be properly sorted out 
+  unless gEDA PCB supports variable radius of rounded rectangle corners) 
+- supports pads on the bottom copper layer
+- cleans up the net names
 - adds a Linux conversion script 'run_conversion.sh' that compiles the tool 
   and runs the footprint conversion on all KiCad modules located in
   
