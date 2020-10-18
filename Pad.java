@@ -97,7 +97,7 @@ public class Pad extends FootprintElementArchetype {
 
     public Pad() { // the default constructor simply creates a simple default pad for testing
         kicadShapePadName = "1";
-        kicadShapeNetName = "GND";
+        kicadShapeNetName = "";
 
         kicadShapeXsizeNm = 800 * 2540;
         kicadShapeYsizeNm = 800 * 2540;
@@ -350,10 +350,15 @@ public class Pad extends FootprintElementArchetype {
         // if empty
         // System.out.println("NetName : " + kicadShapeNetName);
         // System.out.println("PadName : " + kicadShapePadName);
-        if (kicadShapeNetName.length() == 0) {
-            kicadShapeNetName =
-                kicadShapePadName;
+        // if (kicadShapeNetName.length() == 0) {
+        //    kicadShapeNetName = kicadShapePadName;
+        // }
+        
+        // clean auxiliary or empty pad names ("" replaced by __)
+        if ("__".equals(kicadShapePadName)) {
+            kicadShapePadName = "";
         }
+        
 //		System.out.println("finished populating pad object");
     }
 
